@@ -1,0 +1,7 @@
+bucket = "j2digital-terraform-state"
+dynamodb_table = "j2digital-terraform-state-lock"
+encrypt = true
+key = "j2digital-wp-prod/terraform.tfstate"
+role_arn = "arn:aws:iam::[BACKEND_ACCOUNT_ID]:role/[ROLE_TO_ASSUME]"
+profile = "j2digital-terraform"
+region = "us-east-1"
