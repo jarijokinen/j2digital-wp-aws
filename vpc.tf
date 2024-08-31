@@ -31,3 +31,22 @@ resource "aws_subnet" "public_b" {
   cidr_block = "10.0.0.96/27"
   availability_zone = "us-east-1b"
 }
+
+resource "aws_route_table" "public" {
+  vpc_id = aws_vpc.wp.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.wp.id
+  }
+}
+
+resource "aws_route_table_association" "public_a" {
+  subnet_id      = aws_subnet.public_a.id
+  route_table_id = aws_route_table.public.id
+}
+
+resource "aws_route_table_association" "public_b" {
+  subnet_id      = aws_subnet.public_b.id
+  route_table_id = aws_route_table.public.id
+}
