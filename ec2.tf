@@ -10,7 +10,7 @@ resource "aws_launch_template" "wp" {
   )
 
   iam_instance_profile {
-    name = "ecsInstanceRole"
+    name = aws_iam_instance_profile.ecs_instance_role.name
   }
 
   block_device_mappings {
@@ -18,8 +18,23 @@ resource "aws_launch_template" "wp" {
 
     ebs {
       delete_on_termination = true
-      volume_size           = 8
+      volume_size           = 30
       volume_type           = "gp3"
     }
+  }
+}
+
+resource "aws_autoscaling_group" "wp" {
+  min_size             = 1
+  max_size             = 3
+  desired_capacity     = 2
+  vpc_zone_identifier  = [
+    aws_subnet.private_a.id,
+    aws_subnet.private_b.id
+  ]
+
+  launch_template {
+    id      = aws_launch_template.wp.id
+    version = "$Latest"
   }
 }
