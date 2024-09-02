@@ -1,6 +1,7 @@
 resource "aws_launch_template" "wp" {
   image_id               = "ami-01324684792f591ee"
   instance_type          = "t4g.micro"
+  update_default_version = true
   vpc_security_group_ids = [aws_security_group.wp.id]
   user_data              = base64encode(
     <<-EOT
@@ -28,6 +29,7 @@ resource "aws_autoscaling_group" "wp" {
   min_size             = 1
   max_size             = 3
   desired_capacity     = 2
+  force_delete         = true
   vpc_zone_identifier  = [
     aws_subnet.private_a.id,
     aws_subnet.private_b.id
@@ -36,5 +38,9 @@ resource "aws_autoscaling_group" "wp" {
   launch_template {
     id      = aws_launch_template.wp.id
     version = "$Latest"
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
