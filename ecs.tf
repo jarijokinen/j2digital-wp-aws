@@ -47,6 +47,12 @@ resource "aws_ecs_task_definition" "wp" {
           }
         ],
         "essential": true,
+        "mountPoints": [
+          {
+            "sourceVolume": "efs-wp",
+            "containerPath": "/var/www/html"
+          }
+        ],
         "secrets": [
           {
             "name": "WORDPRESS_DB_USER",
@@ -70,6 +76,14 @@ resource "aws_ecs_task_definition" "wp" {
       }
     ]
   EOT
+
+  volume {
+    name = "efs-wp"
+
+    efs_volume_configuration {
+      file_system_id = aws_efs_file_system.wp.id
+    }
+  }
 }
 
 resource "aws_ecs_service" "wp" {
