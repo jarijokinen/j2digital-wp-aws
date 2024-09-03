@@ -28,7 +28,7 @@ resource "aws_launch_template" "wp" {
 resource "aws_autoscaling_group" "wp" {
   min_size             = 1
   max_size             = 3
-  desired_capacity     = 2
+  desired_capacity     = 1
   force_delete         = true
   vpc_zone_identifier  = [
     aws_subnet.private_a.id,
