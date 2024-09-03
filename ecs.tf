@@ -108,8 +108,4 @@ resource "aws_ecs_service" "wp" {
     container_name   = "wp"
     container_port   = 80
   }
-
-  triggers = {
-    redeployment = plantimestamp()
-  }
 }
