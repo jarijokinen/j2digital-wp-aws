@@ -1,2 +1,3 @@
 aws_assume_role_arn = "arn:aws:iam::[ACCOUNT_ID]:role/[ROLE_TO_ASSUME]"
 aws_region = "us-east-1"
+lb_secret_header = "secretvalue"

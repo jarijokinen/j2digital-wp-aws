@@ -31,7 +31,28 @@ resource "aws_lb_listener" "wp" {
   protocol          = "HTTP"
 
   default_action {
+    type             = "fixed-response"
+
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "Access Denied"
+      status_code  = "403"
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "wp" {
+  listener_arn = aws_lb_listener.wp.arn
+
+  action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.wp.arn
+  }
+
+  condition {
+    http_header {
+      http_header_name  = "X-Secret-Header"
+      values            = [var.lb_secret_header]
+    }
   }
 }

@@ -6,3 +6,8 @@ variable "aws_region" {
   description = "AWS region"
   default     = "us-west-1"
 }
+
+variable "lb_secret_header" {
+  description = "X-Secret-Header value for the load balancer"
+  default     = "secretvalue"
+}
