@@ -37,7 +37,7 @@ resource "aws_ecs_task_definition" "wp" {
     [
       {
         "name": "wp",
-        "image": "wordpress:latest",
+        "image": "jarijokinen/wordpress:latest",
         "memory": 512,
         "cpu": 512,
         "portMappings": [
@@ -50,7 +50,7 @@ resource "aws_ecs_task_definition" "wp" {
         "mountPoints": [
           {
             "sourceVolume": "efs-wp",
-            "containerPath": "/var/www/html"
+            "containerPath": "/wp"
           }
         ],
         "secrets": [
@@ -66,11 +66,11 @@ resource "aws_ecs_task_definition" "wp" {
         "environment": [
           {
             "name": "WORDPRESS_DB_HOST",
-            "value": "${aws_db_instance.wp.address}"
+            "value": "${aws_db_instance.wp.endpoint}"
           },
           {
             "name": "WORDPRESS_DB_NAME",
-            "value": "wp"
+            "value": "${aws_db_instance.wp.db_name}"
           }
         ]
       }
@@ -107,5 +107,9 @@ resource "aws_ecs_service" "wp" {
     target_group_arn = aws_lb_target_group.wp.arn
     container_name   = "wp"
     container_port   = 80
+  }
+
+  triggers = {
+    redeployment = plantimestamp()
   }
 }
