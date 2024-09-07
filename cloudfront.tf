@@ -1,9 +1,16 @@
+data "aws_cloudfront_cache_policy" "caching_disabled" {
+  name = "Managed-CachingDisabled"
+}
+
+data "aws_cloudfront_origin_request_policy" "all_viewer" {
+  name = "Managed-AllViewer"
+}
+
 resource "aws_cloudfront_distribution" "wp" {
-  enabled             = true
-  is_ipv6_enabled     = true
-  default_root_object = "index.php"
-  price_class         = "PriceClass_All"
-  http_version        = "http2and3"
+  enabled         = true
+  is_ipv6_enabled = true
+  price_class     = "PriceClass_All"
+  http_version    = "http2and3"
 
   origin {
     domain_name = aws_lb.wp.dns_name
@@ -23,23 +30,17 @@ resource "aws_cloudfront_distribution" "wp" {
   }
 
   default_cache_behavior {
-    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
-    cached_methods   = ["GET", "HEAD"]
     target_origin_id = "wp"
+    allowed_methods  = ["GET", "HEAD", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]
+    cached_methods   = ["GET", "HEAD"]
 
     viewer_protocol_policy = "redirect-to-https"
     min_ttl                = 0
     default_ttl            = 3600
     max_ttl                = 86400
 
-    forwarded_values {
-      headers      = ["Host"]
-      query_string = true
-
-      cookies {
-        forward = "all"
-      }
-    }
+    cache_policy_id = data.aws_cloudfront_cache_policy.caching_disabled.id
+    origin_request_policy_id = data.aws_cloudfront_origin_request_policy.all_viewer.id
   }
 
   restrictions {
