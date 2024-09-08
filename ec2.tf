@@ -11,7 +11,7 @@ resource "aws_launch_template" "wp" {
   )
 
   iam_instance_profile {
-    name = aws_iam_instance_profile.ecs_instance_role.name
+    name = aws_iam_instance_profile.ecs_instance.name
   }
 
   block_device_mappings {

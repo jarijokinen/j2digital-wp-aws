@@ -33,6 +33,7 @@ resource "aws_ecs_task_definition" "wp" {
   requires_compatibilities = ["EC2"]
   network_mode             = "awsvpc"
   execution_role_arn       = aws_iam_role.ecs_task_execution.arn
+  task_role_arn            = aws_iam_role.ecs_task.arn
   container_definitions    = <<-EOT
     [
       {
@@ -87,11 +88,12 @@ resource "aws_ecs_task_definition" "wp" {
 }
 
 resource "aws_ecs_service" "wp" {
-  name                 = "wp"
-  cluster              = aws_ecs_cluster.wp.id
-  task_definition      = aws_ecs_task_definition.wp.arn
-  desired_count        = 1
-  force_new_deployment = true
+  name                   = "wp"
+  cluster                = aws_ecs_cluster.wp.id
+  task_definition        = aws_ecs_task_definition.wp.arn
+  desired_count          = 1
+  force_new_deployment   = true
+  enable_execute_command = true
 
   capacity_provider_strategy {
     capacity_provider = aws_ecs_capacity_provider.wp.name
