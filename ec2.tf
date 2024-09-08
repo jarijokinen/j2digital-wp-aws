@@ -2,7 +2,7 @@ resource "aws_launch_template" "wp" {
   image_id               = "ami-01324684792f591ee"
   instance_type          = "t4g.micro"
   update_default_version = true
-  vpc_security_group_ids = [aws_security_group.wp.id]
+  vpc_security_group_ids = [aws_security_group.ec2.id]
   user_data              = base64encode(
     <<-EOT
       #!/bin/bash

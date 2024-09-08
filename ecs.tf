@@ -43,7 +43,7 @@ resource "aws_ecs_task_definition" "wp" {
         "portMappings": [
           {
             "containerPort": 8080,
-            "hostPort": 80
+            "hostPort": 8080
           }
         ],
         "essential": true,
@@ -101,13 +101,13 @@ resource "aws_ecs_service" "wp" {
 
   network_configuration {
     subnets          = [aws_subnet.private_a.id, aws_subnet.private_b.id]
-    security_groups  = [aws_security_group.wp.id]
+    security_groups  = [aws_security_group.ec2.id]
   }
 
   load_balancer {
     target_group_arn = aws_lb_target_group.wp.arn
     container_name   = "wp"
-    container_port   = 80
+    container_port   = 8080
   }
 
   triggers = {

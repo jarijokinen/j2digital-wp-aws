@@ -19,6 +19,27 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_ipv4" {
   ip_protocol       = "-1"
 }
 
+# EC2
+
+resource "aws_security_group" "ec2" {
+  name   = "ec2"
+  vpc_id = aws_vpc.wp.id
+}
+
+resource "aws_vpc_security_group_ingress_rule" "ec2_allow_http_ipv4" {
+  security_group_id = aws_security_group.ec2.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 8080
+  to_port           = 8080
+  ip_protocol       = "tcp"
+}
+
+resource "aws_vpc_security_group_egress_rule" "ec2_allow_all_ipv4" {
+  security_group_id = aws_security_group.ec2.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1"
+}
+
 # DB
 
 resource "aws_security_group" "db" {

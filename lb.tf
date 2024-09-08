@@ -8,14 +8,14 @@ resource "aws_lb" "wp" {
 
 resource "aws_lb_target_group" "wp" {
   name_prefix = "wp-tg-"
-  port        = 80
+  port        = 8080
   protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = aws_vpc.wp.id
 
   health_check {
     path     = "/"
-    port     = 80
+    port     = 8080
     protocol = "HTTP"
     matcher  = "200-399"
   }
