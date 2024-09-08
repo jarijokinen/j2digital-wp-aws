@@ -38,12 +38,11 @@ resource "aws_ecs_task_definition" "wp" {
     [
       {
         "name": "wp",
-        "image": "jarijokinen/wordpress:latest",
-        "memory": 512,
-        "cpu": 512,
+        "image": "jarijokinen/j2digital-wp:latest",
+        "memory": 128,
         "portMappings": [
           {
-            "containerPort": 80,
+            "containerPort": 8080,
             "hostPort": 80
           }
         ],
